@@ -13,6 +13,13 @@ export const ReturnKeyTypes = {
 export const InputTypes = {
   EMAIL: 'EMAIL',
   PASSWORD: 'PASSWORD',
+  PASSWORD_CONFIRM: 'PASSWORD_CONFIRM',
+};
+
+const PasswordProps = {
+  keyboardType: 'default',
+  secureTextEntry: true,
+  iconName: { active: 'lock', inactive: 'lock-outline' },
 };
 
 const InputTypeProps = {
@@ -30,9 +37,14 @@ const InputTypeProps = {
     secureTextEntry: true,
     iconName: { active: 'lock', inactive: 'lock-outline' },
   },
+  PASSWORD_CONFIRM: {
+    title: 'PASSWORD_CONFIRM',
+    placeholder: 'PASSWORD CONFIRM',
+    ...PasswordProps,
+  },
 };
 
-const Input = forwardRef(({ inputType, ...props }, ref) => {
+const Input = forwardRef(({ inputType, styles, ...props }, ref) => {
   const {
     title,
     placeholder,
@@ -45,7 +57,7 @@ const Input = forwardRef(({ inputType, ...props }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <View style={defaultStyles.container}>
+    <View style={[defaultStyles.container, styles?.container]}>
       <Text
         style={[
           defaultStyles.title,
@@ -69,12 +81,13 @@ const Input = forwardRef(({ inputType, ...props }, ref) => {
               borderColor: value || isFocused ? PRIMARY.DEFAULT : GRAY.DARK,
               color: value || isFocused ? PRIMARY.DEFAULT : GRAY.DARK,
             },
+            styles?.input,
           ]}
           textContentType="none"
           autoCapitalize="none"
           autoCorrect={false}
         />
-        <View style={defaultStyles.icon}>
+        <View style={[defaultStyles.icon, styles?.icon]}>
           <MaterialCommunityIcons
             name={isFocused ? active : inactive}
             size={24}
@@ -91,6 +104,7 @@ Input.displayName = 'Input';
 Input.propTypes = {
   inputType: propTypes.oneOf(Object.values(InputTypes)).isRequired,
   value: propTypes.string.isRequired,
+  styles: propTypes.object,
 };
 
 const defaultStyles = StyleSheet.create({
